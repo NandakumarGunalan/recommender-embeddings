@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Envs
+.venv/
+venv/
+.env
+
+# Data / artifacts
+data/*
+artifacts/*
+!data/README.md
+!artifacts/README.md
+
+# OS
+.DS_Store
