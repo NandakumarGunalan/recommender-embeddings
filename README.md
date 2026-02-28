@@ -178,3 +178,7 @@ Core stack:
 ## License
 
 MIT License.
+
+## Additional Documentation
+
+- System design details: see `ARCHITECTURE.md`
