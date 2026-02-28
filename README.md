@@ -2,16 +2,16 @@
 
 ## Overview
 
-This repository implements a neural embedding–based collaborative filtering system optimized for implicit feedback ranking tasks.
+This repository implements an embedding-based collaborative filtering system optimized for implicit-feedback ranking tasks.
 
-The model uses:
+The model includes:
 
-- Matrix Factorization with learned user and item embeddings
-- Bayesian Personalized Ranking (BPR) loss
-- Negative sampling training strategy
-- Offline ranking evaluation via Recall@K and NDCG@K
+- Matrix Factorization with learned user and item embeddings  
+- Bayesian Personalized Ranking (BPR) loss  
+- Negative sampling training strategy  
+- Offline ranking evaluation via Recall@K and NDCG@K  
 
-The implementation is modular, reproducible, and structured for extensibility toward large-scale recommender systems.
+The codebase is modular and structured for extensibility toward larger-scale recommender systems.
 
 ---
 
@@ -19,20 +19,18 @@ The implementation is modular, reproducible, and structured for extensibility to
 
 Given historical user–item interaction data, the objective is to learn latent representations that produce personalized top-K ranked recommendations.
 
-Unlike regression-based rating prediction, this system optimizes directly for pairwise ranking performance using BPR loss:
+Unlike regression-based rating prediction, this system optimizes directly for **pairwise ranking performance** using BPR loss.
 
-For each user \( u \), positive item \( i \), and negative item \( j \):
+For each user `u`, positive item `i`, and negative item `j`:
 
-\[
-\mathcal{L}_{BPR} = - \log \sigma (\hat{r}_{ui} - \hat{r}_{uj})
-\]
+Loss = - log( sigmoid( r_hat(u,i) - r_hat(u,j) ) )
 
 where:
 
-- \( \hat{r}_{ui} \) is the predicted score for user \( u \) and item \( i \)
-- \( \sigma \) is the sigmoid function
+- `r_hat(u,i)` is the predicted score for user `u` and item `i`
+- `sigmoid(x)` = 1 / (1 + exp(-x))
 
-This directly optimizes ranking quality rather than rating error.
+This formulation directly optimizes ranking quality rather than minimizing rating error.
 
 ---
 
@@ -42,40 +40,33 @@ This directly optimizes ranking quality rather than rating error.
 
 The recommender consists of:
 
-- User embedding matrix \( E_u \in \mathbb{R}^{|U| \times d} \)
-- Item embedding matrix \( E_i \in \mathbb{R}^{|I| \times d} \)
+- User embedding matrix `E_u ∈ R^{|U| × d}`
+- Item embedding matrix `E_i ∈ R^{|I| × d}`
 - Optional bias terms
 
 Prediction function:
 
-\[
-\hat{r}_{ui} = \langle E_u(u), E_i(i) \rangle + b_u + b_i
-\]
+r_hat(u,i) = dot( E_u[u], E_i[i] ) + b_u + b_i
 
-where \( \langle \cdot \rangle \) denotes dot product.
+where `dot(·)` denotes the inner product.
 
 ---
 
 ## System Flow
 
-Data Loading  
-↓  
-Train/Test Split  
-↓  
-Negative Sampling Dataset  
-↓  
-Embedding Model (PyTorch)  
-↓  
-BPR Optimization  
-↓  
-Offline Evaluation (Recall@K, NDCG@K)
+1. Data loading  
+2. Train/test split  
+3. Negative sampling dataset construction  
+4. Embedding model training (PyTorch)  
+5. BPR optimization  
+6. Offline evaluation (Recall@K, NDCG@K)
 
 ---
 
 ## Repository Structure
 
+```text
 recommender-embeddings/
-│
 ├── src/
 │   ├── data.py
 │   ├── train_dataset.py
@@ -84,21 +75,21 @@ recommender-embeddings/
 │   ├── evaluate.py
 │   ├── test_data.py
 │   └── test_model.py
-│
-├── data/                # MovieLens dataset (excluded in .gitignore)
-├── artifacts/           # Saved models (excluded in .gitignore)
+├── data/                 # MovieLens dataset (excluded via .gitignore)
+├── artifacts/            # Saved models (excluded via .gitignore)
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
 ## Dataset
 
-- MovieLens 100K
-- 100,000 explicit interactions
-- Converted to implicit feedback for ranking
+- MovieLens 100K  
+- 100,000 explicit interactions  
+- Converted to implicit feedback for ranking  
 
-Data is excluded from version control.
+Data files are excluded from version control.
 
 ---
 
@@ -108,7 +99,7 @@ Data is excluded from version control.
 python src/train.py
 ```
 
-Model checkpoints are stored in:
+Model checkpoints are written to:
 
 ```
 artifacts/mf_model.pt
@@ -122,10 +113,10 @@ artifacts/mf_model.pt
 python src/evaluate.py
 ```
 
-Metrics:
+Metrics reported:
 
-- Recall@10
-- NDCG@10
+- Recall@10  
+- NDCG@10  
 
 ---
 
@@ -141,49 +132,49 @@ Metrics:
 ## Design Decisions
 
 ### Why BPR?
-- Optimizes ranking directly
-- Suitable for implicit feedback
-- Scales efficiently with negative sampling
+- Optimizes ranking directly  
+- Suitable for implicit feedback  
+- Scales efficiently with negative sampling  
 
 ### Why Embeddings?
-- Compact latent representation
-- Efficient inference via dot product
-- Easily extendable to deeper architectures
+- Compact latent representation  
+- Efficient inference via dot product  
+- Easily extendable to deeper architectures  
 
 ---
 
 ## Production Considerations
 
-This implementation is intentionally modular to support:
+The project is structured to support:
 
-- Hyperparameter tuning
-- Large-scale dataset integration
-- Model versioning
-- Experiment tracking integration
+- Hyperparameter tuning  
+- Larger dataset integration  
+- Model versioning  
+- Experiment tracking integration  
 
-Potential extensions:
+Potential extensions include:
 
-- Adaptive negative sampling
-- Temporal dynamics
-- Regularization tuning
-- Batch inference pipeline
-- ANN-based retrieval (FAISS / ScaNN)
+- Adaptive negative sampling  
+- Temporal modeling  
+- Regularization tuning  
+- Batch inference pipeline  
+- Approximate nearest neighbor retrieval (e.g., FAISS, ScaNN)
 
 ---
 
 ## Dependencies
 
-See `requirements.txt`
+See `requirements.txt`.
 
 Core stack:
 
-- PyTorch
-- NumPy
-- Pandas
-- scikit-learn
+- PyTorch  
+- NumPy  
+- Pandas  
+- scikit-learn  
 
 ---
 
 ## License
 
-MIT License
+MIT License.
